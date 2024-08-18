@@ -52,6 +52,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'LibraryProject.urls'
+import os
 
 TEMPLATES = [
     {
