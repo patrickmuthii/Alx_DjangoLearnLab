@@ -33,13 +33,17 @@ class Librarian(models.Model):
         return self.name
     
 class UserProfile(models.Model):
-    ROLE_CHOICES = [
-        ('Admin', 'Admin'),
+     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+
+
+     Role_Choices =(
+        ('Admin','Admin'),
         ('Librarian', 'Librarian'),
         ('Member', 'Member'),
-    ]
     
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    )
+    
 role = models.CharField(max_length=50,  choices='Role_Choices')
 userprofile = models.TextField()
 

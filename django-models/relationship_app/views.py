@@ -61,6 +61,9 @@ def register_view(request):
 #Setting Up Role-Based Views
 #Checks if user is Admin
 
+def index(request):
+    return render(request, "index.html")
+
 def is_admin(user):
     return user.userprofile.role == 'Admin'
 
