@@ -1,15 +1,14 @@
 from django.shortcuts import render
 from .models import Book, Author, Library, Librarian
-from django.http import HttpResponse
-from django.template import loader
-from django.views.generic import ListView
+from django.views.generic import DetailView
 
-#list all books in the database
 def list_books(request):
-    return render(request, 'list_books.html')
+    books = Book.objects.all()
+    return render(request, 'list_books.html', {'books': books})
 
-class ListView(request):
-    models = Book
-    template_name = 'list_books.html'
-    return render(request (template_name = 'list_books.html')books = Book.objects.all())
 
+
+class LibraryDetailView(DetailView):
+    model = Library
+    template_name = 'library_detail.html'
+    context_object_name = 'library'
