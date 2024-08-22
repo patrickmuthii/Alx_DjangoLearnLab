@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Can Add Book</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Can Add Book</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Add a New Book</h2>
+
+        {% if user.has_perm('relationship_app.can_add_book') %}
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }} <!-- Assumes you're using a Django form to handle book creation -->
+            <button type="submit">Submit</button>
+        </form>
+        {% else %}
+        <p>You do not have permission to add a new book.</p>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Library Management System</p>
+    </footer>
+</body>
+</html>
