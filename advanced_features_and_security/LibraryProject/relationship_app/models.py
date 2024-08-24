@@ -178,7 +178,4 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
-    #objects = CustomUserManager()
-
-   # def __str__(self):
-    #    return self.username
+    
