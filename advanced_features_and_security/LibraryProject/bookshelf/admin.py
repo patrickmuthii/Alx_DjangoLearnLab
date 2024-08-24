@@ -14,7 +14,7 @@ class BookAdmin(admin.ModelAdmin):
     list_filter = ('publication_year',)
 
 
-class UserAdmin(BaseUserAdmin):
+class CustomUserAdmin(BaseUserAdmin):
     model = CustomUser
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
@@ -33,6 +33,6 @@ class UserAdmin(BaseUserAdmin):
         }),
     )
 
-admin.site.register(CustomUser, UserAdmin)
+admin.site.register(CustomUser, CustomUserAdmin)
 
 
