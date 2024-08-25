@@ -2,6 +2,7 @@
 # Create your models here.
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from .models import author
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, password=None, **extra_fields):
@@ -25,6 +26,23 @@ class CustomUser(AbstractUser):
     REQUIRED_FIELDS = ['date_of_birth']
 
     objects = CustomUserManager()  
-    
+
     def __str__(self):
         return self.username
+    
+#define custom permissions in models
+class Book(models.Model):
+    title = models.CharField(max_length=200)
+    author = models.ForeignKey(author, on_delete=models.CASCADE, related_name = 'author')
+    class meta:
+        permissions = [
+        ('can_create_book', 'can_create_book'),
+        ('can_edit_book', 'can_edit_book'),
+        ('can_delete_book', 'can_delete_book'),
+        ('can_view_book', 'can_view_book'),
+    ]
+
+    def __str__(self):
+        return self.title
+      #create and configure groups
+    
