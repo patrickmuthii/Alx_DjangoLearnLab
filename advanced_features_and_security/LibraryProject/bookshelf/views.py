@@ -4,10 +4,10 @@ from django.contrib.auth.decorators import login_required, permission_required
 # Create your views here.
 
 
-@permission_required('bookshelf.list_book', raise_exception=True)
-def list_books(request):
+@permission_required('bookshelf.book_list', raise_exception=True)
+def book_list(request):
     books = Book.objects.all()
-    return render(request, 'bookshelf/view_books.html', {'books': books})
+    return render(request, 'bookshelf/book_list.html', {'books': books})
 
 @permission_required('bookshelf.can_create_book', raise_exception=True)
 def add_book(request):
