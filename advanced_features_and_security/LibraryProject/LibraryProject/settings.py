@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure--h!(4!90gf9zef8^!az1il##wy#p*0ts445d+*hlztyf!#7^e='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -39,9 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bookshelf',
     'relationship_app',
+    'csp',
 ]   
 
 MIDDLEWARE = [
+    'csp.middleware.CSPMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -51,8 +53,19 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# Content Security Policy (CSP) header
+CSP_DEFAULT_SRC = ("'self'",)
+
+CSP_FONT_SRC = ("'self'", "data:")
+
+CSP_IMG_SRC = ("'self'", "data:")
+
+CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'")
+
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
+
 ROOT_URLCONF = 'LibraryProject.urls'
-import os
+
 
 TEMPLATES = [
     {
@@ -127,3 +140,26 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'bookshelf.CustomUser'
 AUTH_USER_MODEL = 'relationship_aPP.CustomUser'
+
+# CSRF and session cookies sent over HTTPS only
+
+# Enforce HTTPS for cookies
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+
+#Browser-side protection
+
+# XSS Protection
+SECURE_BROWSER_XSS_FILTER = True
+# Prevent the site from being framed (clickjacking protection)
+X_FRAME_OPTIONS = 'DENY'
+# Prevent browsers from MIME-sniffing the content type
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Enable Content Security Policy (CSP) header
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'")
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
+CSP_IMG_SRC = ("'self'", "data:")
+CSP_FONT_SRC = ("'self'", "data:")
