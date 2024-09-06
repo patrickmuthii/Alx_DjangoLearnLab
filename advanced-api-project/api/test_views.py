@@ -8,10 +8,10 @@ class BookAPITestCase(APITestCase):
 
     def setUp(self):
         # Set up initial data for testing
-        self.user = User.objects.create_user(username='testuser', password='testpassword')
-        self.book1 = Book.objects.create(title='Book One', author='Author One', publication_year=2021)
-        self.book2 = Book.objects.create(title='Book Two', author='Author Two', publication_year=2022)
-        self.client.login(username='testuser', password='testpassword')
+        self.user = User.objects.create_user(username='patrick', password='patorocky')
+        self.book1 = Book.objects.create(title='psychology of money', author='Morgan Housel', publication_year=2021)
+        self.book2 = Book.objects.create(title='Trading bulls', author='Twain', publication_year=2022)
+        self.client.login(username='patrick', password='patorocky')
 # test on how to create a book using the post method
     def test_create_book(self):
         url = reverse('book-list')
@@ -44,26 +44,26 @@ class BookAPITestCase(APITestCase):
 
 # test on how to filter books using the get method
     def test_filter_books(self):
-        url = f"{reverse('book-list')}?author=Author One"
+        url = f"{reverse('book-list')}?author=Morgan Housel"
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['author'], 'Author One')
+        self.assertEqual(response.data[0]['author'], 'Morgan Housel')
 
 # test on how to search books using the get method
     def test_search_books(self):
-        url = f"{reverse('book-list')}?search=Book One"
+        url = f"{reverse('book-list')}?search=psychology of money"
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['title'], 'Book One')
+        self.assertEqual(response.data[0]['title'], 'psychology of money')
 
 # test on how to order books using the get method
     def test_order_books(self):
         url = f"{reverse('book-list')}?ordering=publication_year"
         response = self.client.get(url, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data[0]['title'], 'Book One')  # Assuming ascending order by default
+        self.assertEqual(response.data[0]['title'], 'psychology of money')  # Assuming ascending order by default
 
 # test on how to restrict access to books using the post method
     def test_permissions(self):
