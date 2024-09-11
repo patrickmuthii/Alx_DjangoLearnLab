@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from blog import views
+from blog.views import views
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
@@ -27,5 +27,5 @@ urlpatterns = [
     path('', include('blog.urls')),
     path('register/', views.register_view, name='register'),
     path('profile/', views.profile_view, name='profile'),
-    path('posts/', views.posts_view, name='posts'),
+    
 ]
