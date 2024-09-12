@@ -16,6 +16,23 @@ class CustomUserCreationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+    
+from .models import Post
+
+class PostForm(forms.Form):
+    class Meta:
+        model = Post
+        fields = ("title", "content", "image")
+
+    def clean_content(self):
+        content = self.cleaned_data.get("content")
+        if not content:
+            raise forms.ValidationError("Content is required")
+        return content
+
+
+
+
 
 from .models import Comment
 

@@ -1,5 +1,10 @@
 from django.shortcuts import render, redirect
 from . import views
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from .models import Post
+from .forms import PostForm
+
 from .models import User
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -36,6 +41,72 @@ def posts_view(request):
 
 def home_view(request):
     return render(request, 'blog/base.html')
+
+
+class PostListView(views.ListView):
+    model = post
+    template_name = 'blog/home.html'
+    context_object_name = 'posts'
+    ordering = ['-created_at']
+
+    def __str_(self):
+        return self.title
+
+class  PostDetailView(views.DetailView):
+    model = post
+    template_name = 'blog/post_detail.html'
+
+    def __str_(self):
+        return self.title
+
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
+class PostCreateView(LoginRequiredMixin, views.CreateView):  
+    model = post
+    fields = ['title', 'content', 'image']
+    template_name = 'blog/post_form.html'
+    success_url = reverse_lazy('posts_list')
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def __str_(self):
+        return self.title
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+class PostUpdateView(LoginRequiredMixin, UserpassesTestMixin,UpdateView):
+    model = post
+    fields = ['title', 'content', 'image']
+    template_name = 'blog/post_form.html'
+    success_url = reverse_lazy('posts_list')
+
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author
+
+    def __str_(self):
+        return self.title
+
+class PostDeleteView(LoginRequiredMixin, UserpassesTestMixin, views.DeleteView):
+    model = post
+    template_name = 'blog/post_confirm_delete.html' 
+    success_url = reverse_lazy('posts_list')
+
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user == post.author
+    
+    def __str_(self):
+        return self.title      
+
+
+
+
+
+
+
+
+
 
 from .forms import CommentForm
 from django.shortcuts import render, get_object_or_404
