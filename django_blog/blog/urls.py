@@ -13,6 +13,7 @@ urlpatterns = [
     path('profile/', views.profile_view, name='profile'),
     path('post/<int:pk>/', post_detail_view, name='post_detail'),
     path('comment/<int:pk>/edit/', edit_comment_view, name='edit_comment'),
+    path('comment/<int:pk>/update/', edit_comment_view, name='edit_comment'),
     path('comment/<int:pk>/delete/', delete_comment_view, name='delete_comment')
     path('', views.PostListView.as_view(), name='post_list'),  # List all posts
     path('post/new/', views.PostCreateView.as_view(), name='post_create'),  # Create a new post
