@@ -16,3 +16,17 @@ class CustomUserCreationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+from .models import Comment
+
+class CommentForm(forms.Form):
+    class Meta:
+        model = Comment
+        fields = ("content")
+
+    def clean_content(self):
+        content = self.cleaned_data.get("content")
+        if not content or len(content) < 5:
+            raise forms.ValidationError("Comment must be at least 5 characters long")
+        return content
+    
