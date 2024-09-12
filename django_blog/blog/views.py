@@ -133,8 +133,25 @@ def Commentview(request):
         'post': post
     }
     )
-@login_required
-def edit_comment_view(request, pk):
+def CommentCreateView(request, pk):
+    post = get_object_or_404(post, pk=pk)
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = request.user
+            comment.save()
+            return redirect('home')
+    else:
+        form = CommentForm()
+    return render(request, 'blog/comment.html', {
+        'form': form,
+        'post': post
+    }
+    )
+
+def CommentUpdateView(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     if request.method == 'POST':
         form = CommentForm(request.POST, instance=comment)
@@ -143,14 +160,14 @@ def edit_comment_view(request, pk):
             return redirect('home')
     else:
         form = CommentForm(instance=comment)
-    return render(request, 'blog/edit_comment.html', {
+    return render(request, 'blog/comment.html', {
         'form': form,
-        'comment': comment
+        'post': comment.post
     }
     )
 
 @login_required
-def delete_comment_view(request, pk):
+def CommentDeleteView(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.delete()
     return redirect('home')
