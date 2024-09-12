@@ -19,5 +19,11 @@ urlpatterns = [
     path('posts/<int:pk>/', views.PostDetailView.as_view(), name='post_detail'),  # View a single post
     path('posts/<int:pk>/edit/', views.PostUpdateView.as_view(), name='post_edit'),  # Edit an existing post
     path('posts/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post_delete'),  # Delete a post
+    path('', views.PostListView.as_view(), name='post_list'),
+    path('posts/new/', views.PostCreateView.as_view(), name='post_create'),
+    path('posts/<int:pk>/', views.PostDetailView.as_view(), name='post_detail'),
+    path('posts/<int:pk>/edit/', views.PostUpdateView.as_view(), name='post_edit'),
+    path('posts/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post_delete'),    
+
+
 ]    
-]
