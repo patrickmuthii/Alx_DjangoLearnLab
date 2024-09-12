@@ -36,7 +36,7 @@ class PostForm(forms.Form):
 
 from .models import Comment
 
-class CommentForm(forms.Form):
+class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ("content")
