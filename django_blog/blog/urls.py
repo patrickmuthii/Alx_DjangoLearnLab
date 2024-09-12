@@ -15,15 +15,14 @@ urlpatterns = [
     path('comment/<int:pk>/edit/', edit_comment_view, name='edit_comment'),
     path('comment/<int:pk>/delete/', delete_comment_view, name='delete_comment')
     path('', views.PostListView.as_view(), name='post_list'),  # List all posts
-    path('posts/new/', views.PostCreateView.as_view(), name='post_create'),  # Create a new post
-    path('posts/<int:pk>/', views.PostDetailView.as_view(), name='post_detail'),  # View a single post
-    path('posts/<int:pk>/edit/', views.PostUpdateView.as_view(), name='post_edit'),  # Edit an existing post
-    path('posts/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post_delete'),  # Delete a post
+    path('post/new/', views.PostCreateView.as_view(), name='post_create'),  # Create a new post
+    path('post/<int:pk>/', views.PostDetailView.as_view(), name='post_detail'),  # View a single post
+    path('post/<int:pk>/edit/', views.PostUpdateView.as_view(), name='post_edit'),  # Edit an existing post
+    path('post/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post_delete'),  # Delete a post
     path('', views.PostListView.as_view(), name='post_list'),
-    path('posts/new/', views.PostCreateView.as_view(), name='post_create'),
-    path('posts/<int:pk>/', views.PostDetailView.as_view(), name='post_detail'),
-    path('posts/<int:pk>/edit/', views.PostUpdateView.as_view(), name='post_edit'),
-    path('posts/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post_delete'),    
-
+    path('post/new/', views.PostCreateView.as_view(), name='post_create'),
+    path('post/<int:pk>/', views.PostDetailView.as_view(), name='post_detail'),
+    path('post/<int:pk>/edit/', views.PostUpdateView.as_view(), name='post_edit'),
+    path('post/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post_delete'),    
 
 ]    
