@@ -21,6 +21,12 @@
 
     <div class="content">
         {% block content %}
+        <!-- blog/templates/base.html or any template where you want the search bar -->
+<form method="get" action="{% url 'search_posts' %}">
+    <input type="text" name="q" placeholder="Search posts..." value="{{ request.GET.q }}">
+    <button type="submit">Search</button>
+</form>
+ 
         <!-- Page-specific content goes here -->
         {% endblock %}
     </div>

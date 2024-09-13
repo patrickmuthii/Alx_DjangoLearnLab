@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
+from taggit.managers import TaggableManager
 
 # Create your models here.
 class User(models.Model):
@@ -24,6 +25,8 @@ class post(models.Model):
     content = models.TextField()
     image = models.URLField(blank=True)
 
+    tags = TaggableManager()
+
     def __str__(self):
         return self.title    
 
@@ -36,3 +39,11 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.content   
+    
+class Tag(models.Model):
+    post = models.ManyToManyField (post)
+    name = models.CharField(max_length=50)   
+
+    def __str__(self):
+        return self.name 
+    

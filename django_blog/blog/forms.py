@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from taggit.forms import TagWidget
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -17,13 +18,16 @@ class CustomUserCreationForm(UserCreationForm):
             user.save()
         return user
     
-from .models import Post
+from .models import post
 
 class PostForm(forms.Form):
     class Meta:
-        model = Post
-        fields = ("title", "content", "image")
+        model = post
+        fields = ("title", "content", "image", "tags")
 
+        widgets = {
+            'tags': TagWidget
+        }
     def clean_content(self):
         content = self.cleaned_data.get("content")
         if not content:
@@ -39,7 +43,7 @@ from .models import Comment
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ("content")
+        fields = ("content",)
 
     def clean_content(self):
         content = self.cleaned_data.get("content")

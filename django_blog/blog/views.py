@@ -2,9 +2,9 @@ from django.shortcuts import render, redirect
 from . import views
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import Post
+from .models import post
 from .forms import PostForm
-
+from django.db.models import Q
 from .models import User
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -63,6 +63,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 class PostCreateView(LoginRequiredMixin, views.CreateView):  
     model = post
+    form_class = PostForm
     fields = ['title', 'content', 'image']
     template_name = 'blog/post_form.html'
     success_url = reverse_lazy('posts_list')
@@ -76,6 +77,7 @@ class PostCreateView(LoginRequiredMixin, views.CreateView):
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 class PostUpdateView(LoginRequiredMixin, UserpassesTestMixin,UpdateView):
     model = post
+    form_class = PostForm
     fields = ['title', 'content', 'image']
     template_name = 'blog/post_form.html'
     success_url = reverse_lazy('posts_list')
@@ -171,3 +173,16 @@ def CommentDeleteView(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.delete()
     return redirect('home')
+
+def search_posts_view(request):
+    query = request.GET.get('q', '')
+    results = post.object.all()
+
+    if query:
+        results = results.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=[query]) 
+        ).distinct()
+
+    return render(request, 'search_results.html', {'results': results, 'query': query})
