@@ -186,3 +186,20 @@ def search_posts_view(request):
         ).distinct()
 
     return render(request, 'search_results.html', {'results': results, 'query': query})
+
+from taggit.models import Tag
+
+class PostByTagListView(ListView):
+    model = Post
+    template_name = 'blog/post_list.html'  # You can create a separate template if needed
+    context_object_name = 'posts'
+    
+    def get_queryset(self):
+        tag_slug = self.kwargs.get('tag_slug')
+        tag = Tag.objects.get(slug=tag_slug)
+        return Post.objects.filter(tags__in=[tag])
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['tag'] = Tag.objects.get(slug=self.kwargs.get('tag_slug'))
+        return context
