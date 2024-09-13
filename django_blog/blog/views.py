@@ -176,10 +176,10 @@ def CommentDeleteView(request, pk):
 
 def search_posts_view(request):
     query = request.GET.get('q', '')
-    results = post.object.all()
+
 
     if query:
-        results = results.filter(
+        results = post.objects.filter(
             Q(title__icontains=query) |
             Q(content__icontains=query) |
             Q(tags__name__icontains=[query]) 
