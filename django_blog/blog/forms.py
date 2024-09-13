@@ -24,7 +24,10 @@ class PostForm(forms.Form):
     class Meta:
         model = post
         fields = ("title", "content", "image", "tags")
-
+        
+        widgets = {
+            'tags': TagWidget()
+        }
       
     def clean_content(self):
         content = self.cleaned_data.get("content")
