@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from . import views
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .models import post
+from .models import Post
 from .forms import PostForm
 from django.db.models import Q
 from .models import User
@@ -44,7 +44,7 @@ def home_view(request):
 
 
 class PostListView(views.ListView):
-    model = post
+    model = Post
     template_name = 'blog/home.html'
     context_object_name = 'posts'
     ordering = ['-created_at']
@@ -53,7 +53,7 @@ class PostListView(views.ListView):
         return self.title
 
 class  PostDetailView(views.DetailView):
-    model = post
+    model = Post
     template_name = 'blog/post_detail.html'
 
     def __str_(self):
@@ -62,7 +62,7 @@ class  PostDetailView(views.DetailView):
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 class PostCreateView(LoginRequiredMixin, views.CreateView):  
-    model = post
+    model = Post
     form_class = PostForm
     fields = ['title', 'content', 'image']
     template_name = 'blog/post_form.html'
@@ -76,7 +76,7 @@ class PostCreateView(LoginRequiredMixin, views.CreateView):
         return self.title
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 class PostUpdateView(LoginRequiredMixin, UserpassesTestMixin,UpdateView):
-    model = post
+    model = Post
     form_class = PostForm
     fields = ['title', 'content', 'image']
     template_name = 'blog/post_form.html'
@@ -90,7 +90,7 @@ class PostUpdateView(LoginRequiredMixin, UserpassesTestMixin,UpdateView):
         return self.title
 
 class PostDeleteView(LoginRequiredMixin, UserpassesTestMixin, views.DeleteView):
-    model = post
+    model = Post
     template_name = 'blog/post_confirm_delete.html' 
     success_url = reverse_lazy('posts_list')
 
@@ -112,11 +112,11 @@ class PostDeleteView(LoginRequiredMixin, UserpassesTestMixin, views.DeleteView):
 
 from .forms import CommentForm
 from django.shortcuts import render, get_object_or_404
-from .models import Comment, post
+from .models import Comment, Post
 
-def post_detail_view(request, pk):
-    post = get_object_or_404(pk=pk)
-    comment = Comment.objects.filter(post=post)
+def Post_detail_view(request, pk):
+    Post = get_object_or_404(pk=pk)
+    comment = Comment.objects.filter(Post=Post)
     new_comment = None
 @login_required
 def Commentview(request):
@@ -124,7 +124,7 @@ def Commentview(request):
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.post = post
+            comment.Post = Post
             comment.author = request.user
             comment.save()
             return redirect('home')
@@ -132,16 +132,16 @@ def Commentview(request):
         form = CommentForm()
     return render(request, 'blog/comment.html', {
         'form': form,
-        'post': post
+        'Post': Post
     }
     )
 def CommentCreateView(request, pk):
-    post = get_object_or_404(post, pk=pk)
+    Post = get_object_or_404(Post, pk=pk)
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.post = post
+            comment.Post = Post
             comment.author = request.user
             comment.save()
             return redirect('home')
@@ -149,7 +149,7 @@ def CommentCreateView(request, pk):
         form = CommentForm()
     return render(request, 'blog/comment.html', {
         'form': form,
-        'post': post
+        'Post': Post
     }
     )
 
@@ -164,7 +164,7 @@ def CommentUpdateView(request, pk):
         form = CommentForm(instance=comment)
     return render(request, 'blog/comment.html', {
         'form': form,
-        'post': comment.post
+        'Post': comment.Post
     }
     )
 
@@ -179,7 +179,7 @@ def search_posts_view(request):
 
 
     if query:
-        results = post.objects.filter(
+        results = Post.objects.filter(
             Q(title__icontains=query) |
             Q(content__icontains=query) |
             Q(tags__name__icontains=[query]) 

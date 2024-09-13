@@ -19,7 +19,7 @@ class profile(models.Model):
 
     def __str__(self):
         return f'{self.user.username} Profile'
-class post(models.Model):
+class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     content = models.TextField()

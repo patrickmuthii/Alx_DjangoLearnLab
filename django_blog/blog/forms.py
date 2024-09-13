@@ -18,11 +18,11 @@ class CustomUserCreationForm(UserCreationForm):
             user.save()
         return user
     
-from .models import post
+from .models import Post
 
 class PostForm(forms.Form):
     class Meta:
-        model = post
+        model = Post
         fields = ("title", "content", "image", "tags")
         
         widgets = {
