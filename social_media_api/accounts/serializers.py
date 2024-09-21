@@ -4,26 +4,34 @@ from rest_framework.authtoken.models import Token
 
 
 
-class UserSerializer(serializers.ModelSerializer):
+from django.contrib.auth import get_user_model
+from rest_framework import serializers
+
+# Get the custom user model
+User = get_user_model()
+
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
+    password_confirm = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
 
     class Meta:
-        User = get_user_model()
-        model = User
-        fields = ['id', 'username', 'email', 'bio', 'profile_picture', 'followers']
+        model = User  # Use the custom user model
+        fields = ['username', 'email', 'password', 'password_confirm', 'bio', 'profile_picture']
 
-class RegisterSerializer(serializers.ModelSerializer):
-    class Meta:
-        User = get_user_model()
-        model = User
-        fields = ['username', 'password', 'email']
-        extra_kwargs = {'password': {'write_only': True}}
+    def validate(self, data):
+        # Ensure passwords match
+        if data['password'] != data['password_confirm']:
+            raise serializers.ValidationError("Passwords must match.")
+        return data
 
     def create(self, validated_data):
-        User = get_user_model()
-        user = User.objects.create_user(
-            username=validated_data['username'],
-            email=validated_data['email'],
-            password=validated_data['password']
-        )
-        Token.objects.create(user=user)
+        # Remove the password_confirm field as it's not needed for user creation
+        validated_data.pop('password_confirm')
+        # Use create_user from the custom user model to create the user
+        user = User.objects.create_user(**validated_data)
         return user
+
+
+class UserLoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
