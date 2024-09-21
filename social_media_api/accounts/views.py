@@ -43,7 +43,7 @@ class UserListView(generics.GenericAPIView):
 
 # View for following a user
 class FollowUserView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = ["permissions.IsAuthenticated"]
 
     def post(self, request, *args, **kwargs):
         try:
@@ -56,7 +56,7 @@ class FollowUserView(generics.GenericAPIView):
 
 # View for unfollowing a user
 class UnfollowUserView(generics.GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = ["permissions.IsAuthenticated"]
 
     def post(self, request, *args, **kwargs):
         try:
