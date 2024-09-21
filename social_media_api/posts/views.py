@@ -50,13 +50,30 @@ class CommentViewSet(viewsets.ModelViewSet):
         serializer.destroy()
                 
 
-class FeedViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .models import Post
+from django.contrib.auth import get_user_model
+from rest_framework import status
 
-    def get_queryset(self):
-        return self.queryset.filter(author__in=self.request.user.following.all().order_by('-created_at'))
+User = get_user_model()
+
+class FeedView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        # Get the list of users the current user is following
+        following_users = request.user.following.all()
+
+        # Fetch posts made by the followed users, ordered by creation date
+        posts = Post.objects.filter(author__in=following_users).order_by('-created_at')
+
+        # Serialize the posts (you'll need to create a PostSerializer)
+        from .serializers import PostSerializer
+        serializer = PostSerializer(posts, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     
     
