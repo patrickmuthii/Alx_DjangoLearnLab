@@ -90,7 +90,7 @@ class LikePostView(generics.GenericAPIView):
 
     def post(self, request, pk):
         # Get the post object
-        post = get_object_or_404(Post, pk=pk)
+        post = generics.get_object_or_404(Post, pk=pk)
         
         # Create or get a Like object for the current user and the post
         like, created = Like.objects.get_or_create(user=request.user, post=post)
@@ -113,7 +113,7 @@ class UnlikePostView(generics.GenericAPIView):
 
     def post(self, request, pk):
         # Get the post object
-        post = get_object_or_404(Post, pk=pk)
+        post = generics.get_object_or_404(Post, pk=pk)
 
         # Check if the like exists and delete it
         try:
