@@ -20,4 +20,8 @@ class CommentSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         return super().validate(attrs)    
 
-              
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = '__all__'
+        read_only_fields = ['liked_by']              
