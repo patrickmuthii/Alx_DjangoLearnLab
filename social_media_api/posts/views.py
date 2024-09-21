@@ -50,3 +50,13 @@ class CommentViewSet(viewsets.ModelViewSet):
         serializer.destroy()
                 
 
+class FeedViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        return self.queryset.filter(author__in=self.request.user.following.all().order_by('-created_at'))
+    
+    
+    
