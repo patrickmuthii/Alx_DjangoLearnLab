@@ -8,6 +8,11 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 # Get the custom user model
+from django.contrib.auth import get_user_model
+from rest_framework import serializers
+from rest_framework.authtoken.models import Token
+
+# Get the custom user model
 User = get_user_model()
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
@@ -29,6 +34,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         validated_data.pop('password_confirm')
         # Use create_user from the custom user model to create the user
         user = User.objects.create_user(**validated_data)
+        # Create a token for the new user
+        Token.objects.create(user=user)
         return user
 
 
