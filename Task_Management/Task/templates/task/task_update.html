@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Task</title>
+ 
+</head>
+<body>
+    <div class="container">
+        <h1>Update Task</h1>
+
+        <!-- Display messages -->
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button  type="submit"  class="btn btn-primary">Update Task</button> 
+            
+        </form>
+
+        <a href="{% url 'task-list' %}" class="btn btn-secondary">Back to Task List</a>
+    </div>
+</body>
+</html>

@@ -1,6 +1,6 @@
-from django.db import models # type: ignore
-from django.conf import settings # type: ignore
-from django.contrib.auth.models import AbstractUser # type: ignore
+from django.db import models 
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser 
 
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
@@ -19,12 +19,22 @@ class Task(models.Model):
         ('In Progress', 'In Progress'),
         ('Completed', 'Completed'),
     ]
+    
+    RECURRING_CHOICES = [
+        ('None', 'None'),
+        ('Daily', 'Daily'),
+        ('Weekly', 'Weekly'),
+        ('Monthly', 'Monthly'),
+    ]
+
     title = models.CharField(max_length=50)
-    description = models.TextField(max_length=50)
+    description = models.TextField(max_length=1000)
     due_date = models.DateField( auto_now=False, auto_now_add=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='Medium')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')
+    recurrence = models.CharField(max_length=20, choices=RECURRING_CHOICES, default='None')
+    is_completed = models.BooleanField(default=False)
     def __str__(self):
         return self.title
 

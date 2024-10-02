@@ -1,0 +1,30 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task List</title>
+</head>
+<body>
+    <h1>Task List</h1>
+    <ul>
+        {% for task in tasks %}
+
+        
+            <li>{{ task.title }} - {{ task.due_Date }}</li>
+            <li><a href="{% url 'update-task' task.id %}">Update</a></li>
+            <li><a href="{% url 'delete-task' task.id %}">Delete</a></li>
+        {% empty %}
+            <li>No tasks available</li><br>
+            <li><a href="{% url 'task-create' %}">Create Task</a></li>
+        {% endfor %}
+
+
+        <br>
+        <a href="{% url 'task-create' %}" class="btn">Add Task</a>
+
+    </body>
+    </ul>
+</body>
+</html>
