@@ -142,7 +142,7 @@ REST_FRAMEWORK = {
     ],
 }
 
-# For testing in development (emails will print to the console)
+# For testing in development environment
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # For production with Gmail (replace with your credentials)
