@@ -13,7 +13,7 @@ from django.contrib import messages
 
 # Create your views here.
 
-
+#This view allows authenticated users to list their tasks and create new tasks.
 class TaskListCreateView(generics.ListCreateAPIView):
     serializer_class = TaskSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -24,7 +24,7 @@ class TaskListCreateView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-
+#This view allows authenticated users to view, update, and delete their tasks.
 class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TaskSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -33,10 +33,11 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
         return Task.objects.filter(user=self.request.user)
 
 
-    
+ # This view allows authenticated users to update their tasks.   
 def update_task(request, pk):
         task = get_object_or_404(Task, pk=pk)
 
+ # If the task is already completed, the user will get an error message.
         if task.status == 'Completed':
             messages.error(request, 'You can not edit this task because you have already completed this task. Please mark it as incomplete first to edit.')
             return render(request, 'task/task_update.html', {'task': task})
@@ -52,6 +53,7 @@ def update_task(request, pk):
             form = TaskForm(instance=task)
         return render(request, 'task/task_form.html', {'form': form})
 
+# This view allows authenticated users to delete their tasks.
 def delete_task(request, pk):
     task = get_object_or_404(Task, pk=pk)
     if request.method == 'POST':
@@ -60,7 +62,7 @@ def delete_task(request, pk):
     return render(request, 'task/task_delete.html', {'task': task})
 
 
-
+# This view allows authenticated users to list their created tasks.
 def task_list(request):
     tasks = Task.objects.all()  
     return render(request, 'task/task_list.html', {'tasks': tasks})
@@ -73,7 +75,7 @@ from django.contrib.auth.decorators import login_required
 
 
 
-#  
+# These views allow authenticated users to create, update, and delete tasks. 
 @login_required
 def task_create(request):
     if request.method == 'POST':
@@ -104,7 +106,8 @@ def notification_mail(user, task):
 
     send_mail(subject, message, from_email, recipient_list)
 
-
+# This view allows authenticated users to create recurring tasks.
+@ login_required
 def create_recurring_task(task):
     if task.recurrence == 'Daily':
         new_due_date = task.due_date + timedelta(days=1)
@@ -124,6 +127,8 @@ def create_recurring_task(task):
         status=task.status,
         recurrence=task.recurrence
     )
+
+# This view allows authenticated users to mark tasks as completed.
 def complete_task(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
     task.status = 'Completed'

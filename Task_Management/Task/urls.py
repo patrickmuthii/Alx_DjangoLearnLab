@@ -3,6 +3,7 @@ from .views import TaskListCreateView, TaskDetailView
 from django.contrib.auth import views as auth_views
 from . import views
 
+#urls for Task Management API
 urlpatterns = [
     path('api/login/', auth_views.LoginView.as_view(), name='login'),
     path('api/logout/', auth_views.LogoutView.as_view(), name='logout'),

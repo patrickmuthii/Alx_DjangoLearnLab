@@ -2,12 +2,13 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser 
 
+# A custom user model with email as unique identifier
 class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     def __str__(self):
         return self.username
     
-
+# A model for storing tasks
 class Task(models.Model):
     PRIORITY_CHOICES = [
         ('Low', 'Low'),
