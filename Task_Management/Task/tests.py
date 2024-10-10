@@ -15,7 +15,7 @@ class TaskAPITestCase(APITestCase):
             password='123456789'
         )
 
-        # Create a client and authenticate the user
+        # Create a client and forces to authenticate the user
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
 
