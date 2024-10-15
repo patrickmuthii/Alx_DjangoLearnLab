@@ -17,10 +17,32 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from django.shortcuts import redirect
+from drf_yasg.views import get_schema_view as swagger_get_schema_view
+from drf_yasg import openapi
+
+
+schema_view = swagger_get_schema_view(
+   openapi.Info(
+      title="Task_Management API",
+      default_version='v1',
+      description="API documentation of app",
+      
+   ),
+   public=True,
+  
+)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('task/', include('Task.urls')),
-    path('', lambda request: redirect('task/'))
+    path('', lambda request: redirect('task/')),
+    path('api/v1/',
+        include([ 
+            path('swagger/schema/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-schema'),
+            path('task/', include('Task.urls')),
 
+
+
+])
+        )
 ]
