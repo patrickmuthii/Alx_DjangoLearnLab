@@ -35,6 +35,7 @@ schema_view = swagger_get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('accounts/', include('django.contrib.auth.urls')),  # Add this line
     path('', lambda request: redirect('task/')),
     path('api/v1/',
         include([ 

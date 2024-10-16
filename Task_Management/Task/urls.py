@@ -5,8 +5,8 @@ from . import views
 
 #urls for Task Management API
 urlpatterns = [
-    path('api/login/', auth_views.LoginView.as_view(), name='login'),
-    path('api/logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('api/login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('api/logout/', auth_views.LogoutView.as_view(template_name = 'registration/logout.html'), name='logout'),
     path('task/', TaskListCreateView.as_view(), name = 'task-list-create'),
     path('task/<int:pk>/', TaskDetailView.as_view(), name = 'task-detail'),
     path('', views.task_list, name = 'task-list'),
